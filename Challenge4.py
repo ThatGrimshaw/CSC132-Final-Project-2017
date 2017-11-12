@@ -42,7 +42,7 @@ class Game(Frame):
         b1 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = b1toggle)
         b1.grid(row = 1, column = 1)
         
-        b2 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = led_9.toggle)
+        b2 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = led_5.toggle)
         b2.grid(row = 1, column = 2)
 
         b3 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = b3toggle)
@@ -57,10 +57,10 @@ class Game(Frame):
         b6 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = b6toggle)
         b6.grid(row = 2, column = 3)
 
-        b7 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = b7toggle)
+        b7 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = led_7.toggle)
         b7.grid(row = 3, column = 1)
 
-        b8 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = led_1.toggle)
+        b8 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = b8toggle)
         b8.grid(row = 3, column = 2)
 
         b9 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = b9toggle)
@@ -107,30 +107,20 @@ def resetLEDs():
 def checkSolution():
     # if all the lights are on, move to next challenge
     if GPIO.input(led_1.pin and led_2.pin and led_3.pin and led_4.pin and led_5.pin and led_6.pin and led_7.pin and led_8.pin and led_9.pin):
-        from Challenge4 import challenge
-        window.title("Level 4")
+        from Challenge5 import challenge
+        window.title("Level 5")
         resetLEDs()
         challenge()
 
 # functions for toggling the proper LEDs when buttons are pressed
-# button 1 toggles 2, 4, 9
+# button 1 toggles 3, 6, 7
 def b1toggle():
-    led_2.toggle()
-    led_4.toggle()
-    led_9.toggle()
-
-# button 3 toggles 1, 3
-def b3toggle():
-    led_1.toggle()
     led_3.toggle()
-
-# button 4 toggles 4, 6
-def b4toggle():
-    led_4.toggle()
     led_6.toggle()
+    led_7.toggle()
 
-# button 5 toggles everything (reverses current state)
-def b5toggle():
+# button 3 toggles all
+def b3toggle():
     led_1.toggle()
     led_2.toggle()
     led_3.toggle()
@@ -141,21 +131,38 @@ def b5toggle():
     led_8.toggle()
     led_9.toggle()
 
-# button 6 toggles 4, 6
+# button 4 toggles 2, 4, 9
+def b4toggle():
+    led_2.toggle()
+    led_4.toggle()
+    led_9.toggle()
+
+# button 5 toggles 1, 3, 5, 6, 7, 8
+def b5toggle():
+    led_1.toggle()
+    led_3.toggle()
+    led_5.toggle()
+    led_6.toggle()
+    led_7.toggle()
+    led_8.toggle()
+
+# button 6 toggles 4, 6, 8
 def b6toggle():
     led_4.toggle()
     led_6.toggle()
+    led_8.toggle()
 
-# button 7 toggles 7, 9
-def b7toggle():
+# button 8 toggles 1, 2, 7, 9
+def b8toggle():
+    led_1.toggle()
+    led_2.toggle()
     led_7.toggle()
     led_9.toggle()
 
-# button 9 toggles 1, 6, 8
+# button 9 toggles 4, 5
 def b9toggle():
-    led_1.toggle()
-    led_6.toggle()
-    led_8.toggle()
+    led_4.toggle()
+    led_5.toggle()
     
 # instantiate the LEDs and give them meaningful names
 led_1 = LED(5)              # the top left LED
@@ -171,7 +178,7 @@ led_9 = LED(20)             # the bottom right LED
 leds = [led_1.pin, led_2.pin, led_3.pin, led_4.pin, led_5.pin, led_6.pin, led_7.pin, led_8.pin, led_9.pin]
 
 window = Tk()
-window.title("Level 3")
+window.title("Level 4")
 
 game = Game(window)
 game.play()

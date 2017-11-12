@@ -33,6 +33,7 @@ class Game(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
         self.master = master
+        master.geometry('{}x{}'.format(800, 480))
 
     # each button variable corresponds to the LED it controls
     # b1 controls LED 1, b2 controls LED 2, etc.
@@ -100,18 +101,18 @@ def resetLEDs():
         led += 1
 
 def checkSolution():
-    from Challenge2 import challenge
     if GPIO.input(led_1.pin and led_2.pin and led_3.pin and led_4.pin and led_5.pin and led_6.pin and led_7.pin and led_8.pin and led_9.pin):
+        from Challenge2 import challenge
         window.title("Level 2")
         resetLEDs()
         challenge()
     
 # instantiate the LEDs and give them meaningful names
 led_1 = LED(5)              # the top left LED
-led_2 = LED(6)              # the top center LED
-led_3 = LED(13)             # the top right LED
-led_4 = LED(19)             # the middle left LED
-led_5 = LED(26)             # the middle center LED
+led_2 = LED(19)             # the top center LED
+led_3 = LED(6)              # the top right LED
+led_4 = LED(26)             # the middle left LED
+led_5 = LED(13)             # the middle center LED
 led_6 = LED(12)             # the middle right LED
 led_7 = LED(21)             # the bottom left LED
 led_8 = LED(16)             # the bottom center LED

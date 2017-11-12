@@ -31,37 +31,37 @@ class Game(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
         self.master = master
+        # make the window fill the screen
+        master.geometry('{}x{}'.format(800, 480))
 
-    # each button variable corresponds to the LED it controls
-    # b1 controls LED 1, b2 controls LED 2, etc.
+    # each button controls different LEDs
+    # the toggle functions are defined at the bottom of the program again
     def setupGUI(self):
-    
-        
-        b1 = Button(self.master, text = "LED 1, 4, 9", width = 12, relief = GROOVE, command = b1toggle)
+        b1 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = b1toggle)
         b1.grid(row = 1, column = 1)
         
-        b2 = Button(self.master, text = "LED 9", width = 12, relief = GROOVE, command = led_9.toggle)
+        b2 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = led_8.toggle)
         b2.grid(row = 1, column = 2)
 
-        b3 = Button(self.master, text = "LED 1, 3", width = 12, relief = GROOVE, command = b3toggle)
+        b3 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = b3toggle)
         b3.grid(row = 1, column = 3)
 
-        b4 = Button(self.master, text = "LED 4, 6", width = 12, relief = GROOVE, command = b4toggle)
+        b4 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = led_5.toggle)
         b4.grid(row = 2, column = 1)
 
-        b5 = Button(self.master, text = "All", width = 12, relief = GROOVE, command = b5toggle)
+        b5 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = led_6.toggle)
         b5.grid(row = 2, column = 2)
 
-        b6 = Button(self.master, text = "LED 4, 6", width = 12, relief = GROOVE, command = b6toggle)
+        b6 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = led_4.toggle)
         b6.grid(row = 2, column = 3)
 
-        b7 = Button(self.master, text = "LED 7, 9", width = 12, relief = GROOVE, command = b7toggle)
+        b7 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = b7toggle)
         b7.grid(row = 3, column = 1)
 
-        b8 = Button(self.master, text = "LED 1", width = 12, relief = GROOVE, command = led_1.toggle)
+        b8 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = led_2.toggle)
         b8.grid(row = 3, column = 2)
 
-        b9 = Button(self.master, text = "LED 1, 6, 8", width = 12, relief = GROOVE, command = b9toggle)
+        b9 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = b9toggle)
         b9.grid(row = 3, column = 3)
 
         # put an empty space between rows 3 and 5
@@ -99,56 +99,44 @@ def resetLEDs():
     for led in leds:
         GPIO.output(led, GPIO.LOW)
         led += 1
-
+        
+# check if every light is turned on (challenge is complete)
+# used by the "Check" button
 def checkSolution():
+    # if all the lights are on, move to next challenge
     if GPIO.input(led_1.pin and led_2.pin and led_3.pin and led_4.pin and led_5.pin and led_6.pin and led_7.pin and led_8.pin and led_9.pin):
-        destroy()
-        import Challenge3
-        Challenge3
-
+        from Challenge3 import challenge
+        window.title("Level 3")
+        resetLEDs()
+        challenge()
+        
+# functions for toggling the proper LEDs when buttons are pressed
+# button 1 toggles 8, 9
 def b1toggle():
-    led_2.toggle()
-    led_4.toggle()
-    led_9.toggle()
-
-def b3toggle():
-    led_1.toggle()
-    led_3.toggle()
-
-def b4toggle():
-    led_4.toggle()
-    led_6.toggle()
-
-def b5toggle():
-    led_1.toggle()
-    led_2.toggle()
-    led_3.toggle()
-    led_4.toggle()
-    led_5.toggle()
-    led_6.toggle()
-    led_7.toggle()
     led_8.toggle()
     led_9.toggle()
 
-def b6toggle():
-    led_4.toggle()
-    led_6.toggle()
-    
-def b7toggle():
+# button 3 toggles 7, 8
+def b3toggle():
     led_7.toggle()
-    led_9.toggle()
+    led_8.toggle()
 
+# button 3 toggles 2, 3
+def b7toggle():
+    led_2.toggle()
+    led_3.toggle()
+
+# button 9 toggles 1, 2
 def b9toggle():
     led_1.toggle()
-    led_6.toggle()
-    led_8.toggle()
+    led_2.toggle()
     
 # instantiate the LEDs and give them meaningful names
 led_1 = LED(5)              # the top left LED
-led_2 = LED(6)              # the top center LED
-led_3 = LED(13)             # the top right LED
-led_4 = LED(19)             # the middle left LED
-led_5 = LED(26)             # the middle center LED
+led_2 = LED(19)             # the top center LED
+led_3 = LED(6)              # the top right LED
+led_4 = LED(26)             # the middle left LED
+led_5 = LED(13)             # the middle center LED
 led_6 = LED(12)             # the middle right LED
 led_7 = LED(21)             # the bottom left LED
 led_8 = LED(16)             # the bottom center LED
@@ -163,3 +151,4 @@ game = Game(window)
 game.play()
 
 window.mainloop()
+

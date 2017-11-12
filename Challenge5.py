@@ -7,6 +7,7 @@
 from Tkinter import *
 import RPi.GPIO as GPIO
 from time import sleep
+import random
 
 GPIO.setmode(GPIO.BCM)
 # the LED class; each LED has an assigned pin
@@ -39,31 +40,31 @@ class Game(Frame):
     # functions for toggling the proper LEDs are defined at the bottom of the program
     def setupGUI(self):
     
-        b1 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = b1toggle)
+        b1 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = randLED)
         b1.grid(row = 1, column = 1)
         
-        b2 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = led_9.toggle)
+        b2 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = randLED)
         b2.grid(row = 1, column = 2)
 
-        b3 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = b3toggle)
+        b3 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = randLED)
         b3.grid(row = 1, column = 3)
 
-        b4 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = b4toggle)
+        b4 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = randLED)
         b4.grid(row = 2, column = 1)
 
-        b5 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = b5toggle)
+        b5 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = randLED)
         b5.grid(row = 2, column = 2)
 
-        b6 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = b6toggle)
+        b6 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = randLED)
         b6.grid(row = 2, column = 3)
 
-        b7 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = b7toggle)
+        b7 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = randLED)
         b7.grid(row = 3, column = 1)
 
-        b8 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = led_1.toggle)
+        b8 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = randLED)
         b8.grid(row = 3, column = 2)
 
-        b9 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = b9toggle)
+        b9 = Button(self.master, text = "?", width = 12, relief = GROOVE, command = randLED)
         b9.grid(row = 3, column = 3)
 
         # put an empty space between rows 3 and 5
@@ -98,64 +99,34 @@ def quitGame():
 # the function for resetting the LEDs in case the user wants to start over in a level
 # used by the "Reset" button
 def resetLEDs():
-    for led in leds:
-        GPIO.output(led, GPIO.LOW)
+    for led in ledpins:
+        GPIO.output(ledpins, GPIO.LOW)
         led += 1
 
+def flashLEDs():
+    i = 0
+    for i in range(0, 4):
+        for led in ledpins:
+            GPIO.output(ledpins, GPIO.HIGH)
+            led += 1
+            GPIO.output(ledpins, GPIO.LOW)
+            led += 1
+        i += 1
+        
 # check if every light is turned on (challenge is complete)
 # used by the "Check" button
 def checkSolution():
+    from Challenge5 import challenge
     # if all the lights are on, move to next challenge
     if GPIO.input(led_1.pin and led_2.pin and led_3.pin and led_4.pin and led_5.pin and led_6.pin and led_7.pin and led_8.pin and led_9.pin):
-        from Challenge4 import challenge
-        window.title("Level 4")
-        resetLEDs()
-        challenge()
+      flashLEDs()
+      quitGame()
 
-# functions for toggling the proper LEDs when buttons are pressed
-# button 1 toggles 2, 4, 9
-def b1toggle():
-    led_2.toggle()
-    led_4.toggle()
-    led_9.toggle()
-
-# button 3 toggles 1, 3
-def b3toggle():
-    led_1.toggle()
-    led_3.toggle()
-
-# button 4 toggles 4, 6
-def b4toggle():
-    led_4.toggle()
-    led_6.toggle()
-
-# button 5 toggles everything (reverses current state)
-def b5toggle():
-    led_1.toggle()
-    led_2.toggle()
-    led_3.toggle()
-    led_4.toggle()
-    led_5.toggle()
-    led_6.toggle()
-    led_7.toggle()
-    led_8.toggle()
-    led_9.toggle()
-
-# button 6 toggles 4, 6
-def b6toggle():
-    led_4.toggle()
-    led_6.toggle()
-
-# button 7 toggles 7, 9
-def b7toggle():
-    led_7.toggle()
-    led_9.toggle()
-
-# button 9 toggles 1, 6, 8
-def b9toggle():
-    led_1.toggle()
-    led_6.toggle()
-    led_8.toggle()
+# every time a button is pressed, it toggles a random LED :)
+# yes, this challenge is completely unpredictable
+def randLED():
+    s = (random.choice(leds))
+    s.toggle()
     
 # instantiate the LEDs and give them meaningful names
 led_1 = LED(5)              # the top left LED
@@ -168,10 +139,11 @@ led_7 = LED(21)             # the bottom left LED
 led_8 = LED(16)             # the bottom center LED
 led_9 = LED(20)             # the bottom right LED
 # make a list of the LEDs
-leds = [led_1.pin, led_2.pin, led_3.pin, led_4.pin, led_5.pin, led_6.pin, led_7.pin, led_8.pin, led_9.pin]
+leds = [led_1, led_2, led_3, led_4, led_5, led_6, led_7, led_8, led_9]
+ledpins = [led_1.pin, led_2.pin, led_3.pin, led_4.pin, led_5.pin, led_6.pin, led_7.pin, led_8.pin, led_9.pin]
 
 window = Tk()
-window.title("Level 3")
+window.title("Level 5")
 
 game = Game(window)
 game.play()
